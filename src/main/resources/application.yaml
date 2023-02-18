@@ -2,7 +2,7 @@ news-job:
   next-execution:
     seconds: 120
   execution-interval:
-    seconds: 60
+    seconds: 86400
   bing:
     subscription-id: 9b251e28ada24ce0b75762f869b19d3c
     max-records-fetch: 500
