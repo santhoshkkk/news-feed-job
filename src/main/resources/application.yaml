@@ -1,11 +1,12 @@
 news-job:
   next-execution:
-    seconds: 120
+    minutes: 1400
   execution-interval:
-    seconds: 86400
+    minutes: 1440
   bing:
     subscription-id: 9b251e28ada24ce0b75762f869b19d3c
     max-records-fetch: 500
+
 
 feign:
   client:
@@ -15,10 +16,10 @@ feign:
 
 spring:
   datasource:
-    url: jdbc:h2:mem:mydb;MODE=PostgreSQL;
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
+    url: jdbc:sqlserver://stock-news.database.windows.net:1433;database=news-feed;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+    username: news-feed@stock-news
+    password: Stock_2023
+    #driverClassName: microsoft.sqlserver.jdbc.SQLServerDriver
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.yml
     enabled: true

@@ -17,20 +17,23 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @EnableScheduling
-@AllArgsConstructor
 @Configuration
 public class NewsJobScheduler {
 
-    @Autowired
+
     private List<NewsService> newsServices;
-
-    @Autowired
     private NewsJobRepository newsJobRepository;
+    private int nextExecutionMinutes;
 
-    @Value("${news-job.next-execution.seconds:120}")
-    private int nextExecutionSeconds;
+    public NewsJobScheduler(List<NewsService> newsServices,
+                            NewsJobRepository newsJobRepository,
+                            @Value("${news-job.next-execution.minutes:1440}") int nextExecutionMinutes) {
+        this.newsServices = newsServices;
+        this.newsJobRepository = newsJobRepository;
+        this.nextExecutionMinutes = nextExecutionMinutes;
+    }
 
-    @Scheduled(fixedRateString = "${news-job.execution-interval.seconds:60}", timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedRateString = "${news-job.execution-interval.minutes:1440}", timeUnit = TimeUnit.MINUTES)
     public void runNewsJobScheduler() {
         log.info("News Job Scheduler Begin");
 
@@ -42,7 +45,7 @@ public class NewsJobScheduler {
                     newsService.retrieveAndSaveNews(newsJob);
                     newsJob.setJobLastRunTime(OffsetDateTime.now());
                     newsJob.setLastUpdateTime(OffsetDateTime.now());
-                    newsJob.setJobNextRunTime(OffsetDateTime.now().plusSeconds(nextExecutionSeconds));
+                    newsJob.setJobNextRunTime(OffsetDateTime.now().plusMinutes(nextExecutionMinutes));
                     newsJobRepository.save(newsJob);
                 }
             }
