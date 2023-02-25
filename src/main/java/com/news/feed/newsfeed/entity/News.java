@@ -21,6 +21,7 @@ public class News {
     private OffsetDateTime datePublished;
     private String source;
     private String title;
+    private String titleHash;
     private String url;
     private String newsDescription;
     private OffsetDateTime createdDateTime;

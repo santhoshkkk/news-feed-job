@@ -36,16 +36,16 @@ public class NewsJobScheduler {
     @Scheduled(fixedRateString = "${news-job.execution-interval.minutes:1440}", timeUnit = TimeUnit.MINUTES)
     public void runNewsJobScheduler() {
         log.info("News Job Scheduler Begin");
-
+        var currentTime = OffsetDateTime.now();
         List<NewsJob> newsJobs = newsJobRepository.findByJobNextRunTimeLessThanEqual(OffsetDateTime.now());
         log.info("Number of records : {}", newsJobs.size());
         for(NewsJob newsJob: newsJobs) {
             for(NewsService newsService: newsServices) {
                 if(newsService.isApplicable(newsJob.getSource())) {
                     newsService.retrieveAndSaveNews(newsJob);
-                    newsJob.setJobLastRunTime(OffsetDateTime.now());
+                    newsJob.setJobLastRunTime(currentTime);
                     newsJob.setLastUpdateTime(OffsetDateTime.now());
-                    newsJob.setJobNextRunTime(OffsetDateTime.now().plusMinutes(nextExecutionMinutes));
+                    newsJob.setJobNextRunTime(currentTime.plusMinutes(nextExecutionMinutes));
                     newsJobRepository.save(newsJob);
                 }
             }

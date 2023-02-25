@@ -65,6 +65,12 @@ databaseChangeLog:
                   name: title
                   type: varchar(MAX)
               - column:
+                  name: title_hash
+                  type: varchar(900)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
                   name: url
                   type: varchar(2000)
               - column:

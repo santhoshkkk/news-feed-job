@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,9 @@ class BingNewsServiceImplTest {
     @Mock
     private NewsRepository newsRepository;
 
+    @Mock
+    private UtilityService utilityService;
+
     @InjectMocks
     private BingNewsServiceImpl bingNewsService;
 
@@ -38,11 +42,13 @@ class BingNewsServiceImplTest {
     void should_fetch_news_and_save_when_valid_source_is_passed() {
         NewsJob newsJob = new NewsJob();
         newsJob.setSource("bing");
+        newsJob.setJobLastRunTime(OffsetDateTime.now());
         BingSearchResponse bingSearchResponse = buildBingSearchResponse();
-        when(microsoftBingClient.getBingNewsSearch(any(),any(),anyInt(),anyInt())).thenReturn(bingSearchResponse);
+        when(microsoftBingClient.getBingNewsSearch(any(),any(),anyString(), anyLong(),anyInt(),anyInt())).thenReturn(bingSearchResponse);
+        when(utilityService.generateHash(anyString())).thenReturn("test hash");
         when(newsRepository.save(any())).thenReturn(new News());
         bingNewsService.retrieveAndSaveNews(newsJob);
-        verify(microsoftBingClient).getBingNewsSearch(any(),any(),anyInt(),anyInt());
+        verify(microsoftBingClient).getBingNewsSearch(any(),any(),anyString(), anyLong(),anyInt(),anyInt());
         verify(newsRepository).save(any());
     }
 

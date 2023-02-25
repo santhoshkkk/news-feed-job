@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -32,10 +31,14 @@ public class BingNewsServiceImpl implements NewsService {
     @Autowired
     private NewsRepository newsRepository;
 
+    @Autowired
+    private UtilityService utilityService;
+
     @Override
     public void retrieveAndSaveNews(NewsJob newsJob) {
         try {
-            BingSearchResponse response =  microsoftBingClient.getBingNewsSearch(subscriptionId, newsJob.getSearchKeyword(), count, 0);
+            BingSearchResponse response =  microsoftBingClient.getBingNewsSearch(subscriptionId, newsJob.getSearchKeyword(),
+                    DATE, newsJob.getJobLastRunTime().toEpochSecond(),count, 0);
             log.info("Number of Records Fetched: {}",response.getTotalEstimatedMatches());
             processNews(response, newsJob);
         } catch (FeignException exception) {
@@ -55,15 +58,23 @@ public class BingNewsServiceImpl implements NewsService {
                 String source = !payload.getProvider().isEmpty()? payload.getProvider().get(0).getName(): "";
                 news.setSource(source);
                 news.setTitle(payload.getName());
+                news.setTitleHash(utilityService.generateHash(payload.getName()));
                 news.setUrl(payload.getUrl());
                 news.setDatePublished(OffsetDateTime.parse(payload.getDatePublished(), DateTimeFormatter.ISO_DATE_TIME));
                 news.setStockName(newsJob.getStockName());
                 news.setCreatedDateTime(OffsetDateTime.now());
                 news.setLastUpdateTime(OffsetDateTime.now());
-                newsRepository.save(news);
+                saveNews(news);
             }
         }
 
+    }
+    private void saveNews(News news) {
+        try {
+            newsRepository.save(news);
+        } catch (RuntimeException ex) {
+            log.error("Exception occurred", ex);
+        }
     }
     @Override
     public boolean isApplicable(String source) {
