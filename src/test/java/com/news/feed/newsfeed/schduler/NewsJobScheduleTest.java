@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,14 +43,15 @@ public class NewsJobScheduleTest {
     void should_run_scheduler_when_scheduled() {
         NewsJob newsJob = new NewsJob();
         newsJob.setSource("bing");
+        newsJob.setJobLastRunTime(OffsetDateTime.parse("2016-08-24T18:38:05.507+00:00"));
         List<NewsJob> newsJobs = new ArrayList<>();
         newsJobs.add(newsJob);
-        when(newsJobRepository.findByJobNextRunTimeLessThanEqual(any())).thenReturn(newsJobs);
+        when(newsJobRepository.findAll()).thenReturn(newsJobs);
         when(newsJobRepository.save(any())).thenReturn(new NewsJob());
         when(bingNewsService.isApplicable(anyString())).thenReturn(true);
         doNothing().when(bingNewsService).retrieveAndSaveNews(any());
         newsJobScheduler.runNewsJobScheduler();
-        verify(newsJobRepository).findByJobNextRunTimeLessThanEqual(any());
+        verify(newsJobRepository).findAll();
         verify(newsJobRepository).save(any());
         verify(bingNewsService).isApplicable(anyString());
         verify(bingNewsService).retrieveAndSaveNews(any());

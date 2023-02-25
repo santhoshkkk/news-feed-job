@@ -1,18 +1,12 @@
 news-job:
   next-execution:
-    minutes: 1400
+    minutes: 2
   execution-interval:
-    minutes: 1440
+    minutes: 3
   bing:
     subscription-id: 9b251e28ada24ce0b75762f869b19d3c
     max-records-fetch: 500
 
-
-feign:
-  client:
-    config:
-      default:
-        loggerLevel: basic
 
 spring:
   datasource:
@@ -25,9 +19,22 @@ spring:
     enabled: true
   jpa:
     spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        show_sql: false
   h2:
     console.enabled: true
 
 remote:
   bing:
     base-url: https://api.bing.microsoft.com/v7.0/news/search
+
+logging:
+  level:
+    com:
+      news:
+        feed:
+          newsfeed:
+            remote:
+              bing:
+                MicrosoftBingClient: DEBUG

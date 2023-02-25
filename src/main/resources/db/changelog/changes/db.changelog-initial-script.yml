@@ -32,9 +32,6 @@ databaseChangeLog:
                   name: job_last_run_time
                   type: TIMESTAMP WITH TIME ZONE
               - column:
-                  name: job_next_run_time
-                  type: TIMESTAMP WITH TIME ZONE
-              - column:
                   name: created_date_time
                   type: TIMESTAMP WITH TIME ZONE
               - column:

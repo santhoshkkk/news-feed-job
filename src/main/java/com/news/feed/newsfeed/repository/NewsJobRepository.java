@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface NewsJobRepository extends JpaRepository<NewsJob, Long> {
 
-    List<NewsJob> findByJobNextRunTimeLessThanEqual(OffsetDateTime currentTime);
+    List<NewsJob> findAll();
 }

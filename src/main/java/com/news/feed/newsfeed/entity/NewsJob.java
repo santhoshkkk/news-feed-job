@@ -22,7 +22,6 @@ public class NewsJob {
     private String searchKeyword;
     private String source;
     private OffsetDateTime jobLastRunTime;
-    private OffsetDateTime jobNextRunTime;
     private OffsetDateTime createdDateTime;
     private OffsetDateTime lastUpdateTime;
 
