@@ -44,11 +44,11 @@ class BingNewsServiceImplTest {
         newsJob.setSource("bing");
         newsJob.setJobLastRunTime(OffsetDateTime.now());
         BingSearchResponse bingSearchResponse = buildBingSearchResponse();
-        when(microsoftBingClient.getBingNewsSearch(any(),any(),anyString(), anyLong(),anyInt(),anyInt())).thenReturn(bingSearchResponse);
+        when(microsoftBingClient.getBingNewsSearch(any(),any(),anyString(), anyString(),anyInt(),anyInt())).thenReturn(bingSearchResponse);
         when(utilityService.generateHash(anyString())).thenReturn("test hash");
         when(newsRepository.save(any())).thenReturn(new News());
         bingNewsService.retrieveAndSaveNews(newsJob);
-        verify(microsoftBingClient).getBingNewsSearch(any(),any(),anyString(), anyLong(),anyInt(),anyInt());
+        verify(microsoftBingClient).getBingNewsSearch(any(),any(),anyString(), anyString(),anyInt(),anyInt());
         verify(newsRepository).save(any());
     }
 

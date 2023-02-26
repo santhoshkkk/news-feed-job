@@ -13,7 +13,7 @@ public interface MicrosoftBingClient {
     @GetMapping
     BingSearchResponse getBingNewsSearch(@RequestHeader(value = "Ocp-Apim-Subscription-Key") String subscriptionId,
                                          @RequestParam(value = "q") String query, @RequestParam(value = "sortBy") String sortBy,
-                                         @RequestParam(value = "since") long since,
+                                         @RequestParam(value = "freshness") String freshness,
                                          @RequestParam(value = "count") int count,
                                          @RequestParam(value = "offset") int offset);
 }

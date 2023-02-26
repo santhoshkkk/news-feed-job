@@ -38,7 +38,7 @@ public class BingNewsServiceImpl implements NewsService {
     public void retrieveAndSaveNews(NewsJob newsJob) {
         try {
             BingSearchResponse response =  microsoftBingClient.getBingNewsSearch(subscriptionId, newsJob.getSearchKeyword(),
-                    DATE, newsJob.getJobLastRunTime().toInstant().toEpochMilli(), count, 0);
+                    DATE, DAY, count, 0);
             log.info("Number of Records Fetched: {}",response.getTotalEstimatedMatches());
             processNews(response, newsJob);
         } catch (FeignException exception) {
