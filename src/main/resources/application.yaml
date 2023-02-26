@@ -1,8 +1,8 @@
 news-job:
   next-execution:
-    minutes: 2
+    minutes: 1400
   execution-interval:
-    minutes: 3
+    minutes: 1440
   bing:
     subscription-id: 9b251e28ada24ce0b75762f869b19d3c
     max-records-fetch: 500
